@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--hibernate配置文件-->
+<!--导入配置约束-->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="show_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <!--<property name="hibernate.current_session_context_class">thread</property>-->
+        <!--<mapping class="com.diaz.entity.User"/>-->
+        <property name="hibernate.cache.use_query_cache">true</property>
+        <property name="hibernate.cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.use_structured_entries">true</property>
+        <property name="hibernate.cache.region_prefix">hibernate</property>
+        <property name="hibernate.cache.region.factory_class">
+            org.hibernate.cache.redis.hibernate5.SingletonRedisRegionFactory
+        </property>
+        <property name="hibernate.cache.provider_configuration_file_resource_path">
+            hibernate-redis.properties
+        </property>
+        <!--<property name="hibernate.cache.provider_class">org.hibernate.cache.redis.hibernate5.stra</property>-->
+    </session-factory>
+</hibernate-configuration>

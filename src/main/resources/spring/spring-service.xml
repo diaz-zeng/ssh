@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="com.diaz.service">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <aop:config>
+        <aop:pointcut id="txCut" expression="execution(* com.diaz.service..*.*(..))"/>
+        <aop:advisor advice-ref="transactionInterceptor" pointcut-ref="txCut"/>
+    </aop:config>
+    <tx:advice id="transactionInterceptor">
+        <tx:attributes>
+            <!--必须对所有方法进行事务控制，否则会抛出javax.persistence.TransactionRequiredException-->
+            <!--<tx:method name="find*" propagation="NOT_SUPPORTED"/>-->
+            <!--<tx:method name="list*" propagation="NOT_SUPPORTED"/>-->
+            <!--<tx:method name="get*" propagation="NOT_SUPPORTED"/>-->
+            <tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Exception" isolation="READ_COMMITTED"/>
+        </tx:attributes>
+    </tx:advice>
+</beans>
